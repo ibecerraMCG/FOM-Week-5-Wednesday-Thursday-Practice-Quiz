@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 5 Wednesday & Thursday Practice Quiz</title>
+    <style>
+        /* --- Color Variables --- */
+        :root {
+            /* Default: Dark Theme */
+            --bg-color: #2d343e; /* Dark background */
+            --container-bg: #3c424f; /* Slightly lighter container */
+            --text-color: #e8e6e3; /* Light text */
+            --question-text-color: #8ab4f8; /* Light blue for questions */
+            --lo-text-color: #b0c4de; /* Lighter blue for learning objective */
+            --border-color: #555; /* Darker borders */
+            --separator-color: #4a4f5a;
+            --label-bg: #454c5a;
+            --label-border: #6c757d;
+            --label-hover-bg: #525966;
+            --label-hover-border: #7a828a;
+            --button-bg: #8ab4f8;
+            --button-text: #202124;
+            --button-hover-bg: #a3c5f9;
+            --button-disabled-bg: #5f6368;
+            --feedback-correct-bg: #344e41;
+            --feedback-correct-text: #c7f9cc;
+            --feedback-correct-border: #52b788;
+            --feedback-incorrect-bg: #5e2129;
+            --feedback-incorrect-text: #f8d7da;
+            --feedback-incorrect-border: #a4133c;
+            --feedback-rationale-text: #adb5bd; /* Lighter gray for rationale */
+            --feedback-source-text: #c7d3e0;
+            --feedback-separator: #6c757d;
+            --radio-accent: #8ab4f8;
+        }
+
+        .light-theme {
+            --bg-color: #eef2f7;
+            --container-bg: #ffffff;
+            --text-color: #343a40;
+            --question-text-color: #0056b3;
+            --lo-text-color: #5a6e8a;
+            --border-color: #dee2e6;
+            --separator-color: #e9ecef;
+            --label-bg: #f8f9fa;
+            --label-border: #ced4da;
+            --label-hover-bg: #e2e6ea;
+            --label-hover-border: #adb5bd;
+            --button-bg: #007bff;
+            --button-text: white;
+            --button-hover-bg: #0056b3;
+            --button-disabled-bg: #6c757d;
+            --feedback-correct-bg: #d1e7dd;
+            --feedback-correct-text: #0f5132;
+            --feedback-correct-border: #badbcc;
+            --feedback-incorrect-bg: #f8d7da;
+            --feedback-incorrect-text: #842029;
+            --feedback-incorrect-border: #f5c2c7;
+            --feedback-rationale-text: #495057;
+            --feedback-source-text: #343a40;
+            --feedback-separator: #ccc;
+            --radio-accent: #007bff;
+        }
+
+        /* --- General Styles --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 40px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #theme-toggle-button {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            padding: 8px 12px;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: 1px solid var(--label-border);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            z-index: 1000;
+             transition: background-color 0.3s, color 0.3s;
+        }
+         #theme-toggle-button:hover {
+             opacity: 0.8;
+         }
+
+
+        #quiz-container {
+            max-width: 900px;
+            margin: 80px auto 30px auto;
+            background: var(--container-bg);
+            padding: 25px 35px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .question-block {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--separator-color);
+            transition: border-color 0.3s;
+        }
+
+        .question-block:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 5px;
+        }
+        
+        .learning-objective {
+            font-size: 0.85em;
+            font-style: italic;
+            color: var(--lo-text-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--separator-color);
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 18px;
+            color: var(--question-text-color);
+            transition: color 0.3s;
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 12px;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid var(--label-border);
+            background-color: var(--label-bg);
+            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
+
+        .options label:hover {
+            background-color: var(--label-hover-bg);
+            border-color: var(--label-hover-border);
+        }
+
+        .options input[type="radio"]:checked+span {
+             font-weight: bold;
+             color: var(--question-text-color);
+        }
+        .options input[type="radio"] {
+            margin-right: 12px;
+            accent-color: var(--radio-accent);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .check-button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background-color 0.2s, color 0.2s, opacity 0.2s;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+        }
+
+        .check-button:hover {
+            opacity: 0.85;
+        }
+
+         .check-button:disabled {
+             background-color: var(--button-disabled-bg);
+             cursor: not-allowed;
+             opacity: 0.7;
+         }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 0.95em;
+            display: none;
+            border: 1px solid transparent;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        .feedback.correct {
+            background-color: var(--feedback-correct-bg);
+            color: var(--feedback-correct-text);
+            border-color: var(--feedback-correct-border);
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background-color: var(--feedback-incorrect-bg);
+            color: var(--feedback-incorrect-text);
+            border-color: var(--feedback-incorrect-border);
+            display: block;
+        }
+
+        .feedback-status {
+             font-weight: bold;
+             font-size: 1.1em;
+             display: block;
+             margin-bottom: 8px;
+        }
+
+        .feedback-rationale {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--feedback-separator);
+            font-size: 0.9em;
+            color: var(--feedback-rationale-text);
+            transition: color 0.3s, border-color 0.3s;
+        }
+        
+        .feedback-source {
+            margin-top: 10px;
+            font-size: 0.85em;
+            font-style: italic;
+            color: var(--feedback-source-text);
+            background-color: rgba(0,0,0,0.1);
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--question-text-color);
+            margin-top: 30px;
+            margin-bottom: 30px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+    </style>
+</head>
+<body>
+
+    <button id="theme-toggle-button">Toggle Theme</button>
+    <h1>Week 5 Wednesday & Thursday Practice Quiz</h1>
+
+    <div id="quiz-container">
+        <!-- Questions will be loaded here by JavaScript -->
+    </div>
+
+    <script>
+        const quizData = [
+            // Foundations of Cancer Treatment Questions
+            {
+                learningObjective: "LO1 (Foundations of Cancer Treatment): Describe broadly the rationales and indications for surgery in the treatment of cancer.",
+                question: "A 35-year-old woman with a known pathogenic BRCA1 mutation and a strong family history of breast and ovarian cancer elects to undergo a bilateral mastectomy and oophorectomy, despite having no evidence of cancer herself. This type of surgical intervention is best classified as:",
+                options: { A: "Palliative", B: "Diagnostic", C: "Definitive/curative", D: "Prophylactic" },
+                correctAnswer: "D",
+                rationale: "Prophylactic surgery involves the removal of an organ or tissue that is at high risk of developing cancer in the future, with the goal of preventing the cancer from ever occurring. This is a common strategy for individuals with high-risk genetic mutations like BRCA1/2.",
+                source: "'Prophylactic surgery - Some underlying conditions or congenital or genetic traits are associated with a significantly higher incidence of cancer... prophylactic bilateral or contralateral mastectomy and oophorectomy for individuals with breast cancer who carry a BRCA1 or 2 gene mutation.' (Foundations of Cancer Treatment, Page 2)"
+            },
+            {
+                learningObjective: "LO1 (Foundations of Cancer Treatment): Describe broadly the rationales and indications for surgery in the treatment of cancer.",
+                question: "A surgeon performs an excisional biopsy of a suspicious skin lesion. Which of the following best describes this procedure?",
+                options: { A: "Removal of a small wedge of tissue from a larger mass", B: "Use of a fine needle to aspirate cells for cytology", C: "Excision of the entire suspected tumor tissue", D: "Partial resection of a bulky tumor to improve the efficacy of other treatments" },
+                correctAnswer: "C",
+                rationale: "An excisional biopsy is a diagnostic procedure where the entire lesion is removed, often with a small margin of normal tissue. This is in contrast to an incisional biopsy, where only a piece of the tumor is taken.",
+                source: "'Excisional biopsy: involves excision of the entire suspected tumor tissue with little or no margin of surrounding normal tissue.' (Foundations of Cancer Treatment, Page 2)"
+            },
+            {
+                learningObjective: "LO1 (Foundations of Cancer Treatment): Describe broadly the rationales and indications for surgery in the treatment of cancer.",
+                question: "Curative surgery is most likely to be successful for tumors with which of the following sets of characteristics?",
+                options: { A: "Fast-growing, high growth fraction, high metastatic potential", B: "Slow-growing, low growth fraction, low metastatic potential", C: "Disseminated hematologic malignancies", D: "Poorly differentiated, widely invasive tumors" },
+                correctAnswer: "B",
+                rationale: "Surgery is a local therapy and is most effective for tumors that are localized and have not spread. Therefore, tumors that are slow-growing, have a low proportion of dividing cells (low growth fraction), and have a low potential to metastasize are the most amenable to being cured by surgical resection alone.",
+                source: "'Slow-growing tumors with a long cell cycle, low growth fraction (= cells actively dividing/total number of cells), and low metastatic potential are the most amenable to curative surgical treatment.' (Foundations of Cancer Treatment, Page 2)"
+            },
+            {
+                learningObjective: "LO2 (Foundations of Cancer Treatment): Describe broadly the rationales and indications for radiotherapy in the treatment of cancer and the biological effect of radiation on cancer cells.",
+                question: "The primary biological effect of ionizing radiation that leads to cancer cell death is damage to which of the following macromolecules?",
+                options: { A: "Ribosomes", B: "Mitochondrial membranes", C: "Chromosomal DNA", D: "Cytoskeletal proteins" },
+                correctAnswer: "C",
+                rationale: "While radiation can damage many cellular components, its most critical and lethal effect is damage to chromosomal DNA. Double-strand breaks (DSBs) are considered the most lethal form of DNA damage induced by radiation, leading to chromosomal instability, mutation, and apoptosis.",
+                source: "'The biological effects of radiation are complex and mainly derived from damage to chromosomal DNA. Ionizing radiation may also directly affect DNA structure by inducing DNA breaks, particularly, DSBs (considered as the most lethal damage to DNA).' (Foundations of Cancer Treatment, Page 3)"
+            },
+            {
+                learningObjective: "LO2 (Foundations of Cancer Treatment): Describe broadly the rationales and indications for radiotherapy in the treatment of cancer and the biological effect of radiation on cancer cells.",
+                question: "Ionizing radiation can damage cells through two main mechanisms: a direct effect and an indirect effect. The indirect effect, which accounts for the majority of radiation-induced damage, is mediated by:",
+                options: { A: "Direct ionization of the DNA molecule", B: "Generation of free radicals and reactive oxygen species (ROS)", C: "Inhibition of cellular ATP production", D: "Activation of pro-apoptotic cell surface receptors" },
+                correctAnswer: "B",
+                rationale: "The indirect effect of radiation occurs when the radiation ionizes water molecules within the cell, creating highly reactive free radicals and reactive oxygen species (ROS) like the hydroxyl radical. These ROS then diffuse and cause damage to critical cellular components, primarily DNA.",
+                source: "'Ionizing radiation generates free radicals and reactive oxygen species (ROS) in the cell. The ROS can cause significant secondary effects and oxidative damage to all of the polymeric molecules such as nucleic acids...' (Foundations of Cancer Treatment, Page 3)"
+            },
+            {
+                learningObjective: "LO2 (Foundations of Cancer Treatment): Describe broadly the rationales and indications for radiotherapy in the treatment of cancer and the biological effect of radiation on cancer cells.",
+                question: "Which of the following cell populations would be considered the most radiosensitive?",
+                options: { A: "Neurons in the central nervous system", B: "Quiescent muscle cells", C: "Cells in the bone marrow", D: "Mature chondrocytes in cartilage" },
+                correctAnswer: "C",
+                rationale: "Radiosensitivity is directly related to the proliferative rate of a cell population. Cells that are dividing rapidly, such as hematopoietic stem cells in the bone marrow and epithelial cells of the GI tract, are highly radiosensitive. Quiescent or slowly dividing cells, like neurons, are much more radioresistant.",
+                source: "'Quiescent and slowly dividing cells are less radiosensitive (like those constituting the nervous system), while cells with high proliferation rates are more radiosensitive (like bone marrow, skin, and epithelial cells of the gastro-intestinal tract, among others).' (Foundations of Cancer Treatment, Page 4)"
+            },
+            {
+                learningObjective: "LO3 (Foundations of Cancer Treatment): Discuss briefly the commonly used treatment modalities in radiotherapy, the rationale for fractionation of the radiation dose, and common side effects of radiotherapy.",
+                question: "A patient with early-stage breast cancer receives a course of external beam radiation therapy (EBRT) consisting of 50 Gray delivered in 25 daily treatments over 5 weeks. This practice of dividing the total radiation dose into multiple smaller doses is known as:",
+                options: { A: "Brachytherapy", B: "Systemic radiation therapy", C: "Fractionation", D: "Stereotactic radiosurgery (SRS)" },
+                correctAnswer: "C",
+                rationale: "Fractionation is the process of dividing a total radiation dose into a series of smaller, daily doses. This is a fundamental principle of radiotherapy that aims to maximize tumor cell killing while minimizing damage to surrounding normal tissues.",
+                source: "'Fractionated radiotherapy... the total dose of radiation prescribed to treat a particular tumor in EBRT is divided into a number of daily doses or fractions - fractionation.' (Foundations of Cancer Treatment, Page 5)"
+            },
+            {
+                learningObjective: "LO3 (Foundations of Cancer Treatment): Discuss briefly the commonly used treatment modalities in radiotherapy, the rationale for fractionation of the radiation dose, and common side effects of radiotherapy.",
+                question: "What is the primary radiobiological rationale for using a fractionated radiation schedule?",
+                options: { A: "To allow cancer cells time to become more resistant between doses", B: "To deliver the entire radiation dose in a single, convenient session", C: "To allow normal, healthy cells time to repair sublethal DNA damage between treatments", D: "To synchronize all tumor cells into the most radioresistant phase of the cell cycle" },
+                correctAnswer: "C",
+                rationale: "The main advantage of fractionation is that it exploits the difference in repair capacity between normal cells and cancer cells. The interval between fractions allows normal tissues to repair sublethal radiation damage more efficiently than tumor cells, which often have defective DNA repair pathways. This widens the therapeutic window.",
+                source: "'Repair- Repair is one of the primary reasons for fractionated radiotherapy. By fractionating the radiation dose into smaller parts normal cells are allowed time to repair sublethal damage.' (Foundations of Cancer Treatment, Page 5)"
+            },
+            {
+                learningObjective: "LO3 (Foundations of Cancer Treatment): Discuss briefly the commonly used treatment modalities in radiotherapy, the rationale for fractionation of the radiation dose, and common side effects of radiotherapy.",
+                question: "A patient undergoing radiation therapy to the pelvis for prostate cancer develops diarrhea and urinary frequency. These side effects are occurring during the treatment course. How would these toxicities be classified?",
+                options: { A: "Acute toxicities", B: "Late toxicities", C: "Systemic toxicities", D: "Anaphylactic reactions" },
+                correctAnswer: "A",
+                rationale: "Acute toxicities are adverse effects that occur during or shortly after the course of radiation therapy, typically within two months of completion. They are usually caused by damage to rapidly dividing tissues like the intestinal and bladder mucosa. Late toxicities appear months to years after treatment.",
+                source: "'Common toxicities include diarrhea, nausea and vomiting, mucositis, xerostomia... Most acute toxicities resolve within the two months after the completion of radiation therapy...' (Foundations of Cancer Treatment, Page 7)"
+            },
+            {
+                learningObjective: "LO4 (Foundations of Cancer Treatment): Describe broadly the rationales and indications for chemotherapy in the treatment of cancer.",
+                question: "A patient with early-stage breast cancer undergoes a lumpectomy. Following surgery, she is treated with chemotherapy to eliminate any microscopic cancer cells that may remain in the body. This use of chemotherapy after the primary treatment is known as:",
+                options: { A: "Neoadjuvant therapy", B: "Palliative therapy", C: "Adjuvant therapy", D: "Induction therapy" },
+                correctAnswer: "C",
+                rationale: "Adjuvant therapy is treatment given after the primary treatment (like surgery) to target and destroy any residual microscopic disease, with the goal of reducing the risk of recurrence and curing the patient.",
+                source: "'After other treatments, to kill hidden cancer cells: Chemotherapy can be used after other treatments, such as surgery, to kill any cancer cells that might remain in the body. Doctors call this adjuvant therapy.' (Foundations of Cancer Treatment, Page 7)"
+            },
+            {
+                learningObjective: "LO4 (Foundations of Cancer Treatment): Describe broadly the rationales and indications for chemotherapy in the treatment of cancer.",
+                question: "A patient is diagnosed with a large, locally advanced rectal cancer that is initially considered unresectable. The patient receives chemotherapy and radiation before surgery to shrink the tumor and improve the chances of a successful resection. This use of therapy before the primary treatment is known as:",
+                options: { A: "Adjuvant therapy", B: "Neoadjuvant therapy", C: "Salvage therapy", D: "Consolidation therapy" },
+                correctAnswer: "B",
+                rationale: "Neoadjuvant therapy is treatment given before the main treatment. Its purpose is often to shrink a tumor to make surgery easier or more effective, or to allow for a less extensive surgical procedure (e.g., lumpectomy instead of mastectomy).",
+                source: "'To prepare a patient for other treatments: Chemotherapy can be used to shrink a tumor so that other treatments, such as radiation and surgery, are possible. Doctors call this neoadjuvant therapy.' (Foundations of Cancer Treatment, Page 7)"
+            },
+            {
+                learningObjective: "LO4 (Foundations of Cancer Treatment): Describe broadly the rationales and indications for chemotherapy in the treatment of cancer.",
+                question: "A patient with widely metastatic pancreatic cancer that is not considered curable is given chemotherapy. The primary goal of this treatment is to relieve symptoms, improve quality of life, and potentially prolong survival. This intent of therapy is best described as:",
+                options: { A: "Curative", B: "Prophylactic", C: "Adjuvant", D: "Palliative" },
+                correctAnswer: "D",
+                rationale: "Palliative chemotherapy is used in the setting of advanced, incurable disease. The focus is not on curing the cancer, but on managing symptoms, improving the patient's quality of life, and potentially extending their lifespan.",
+                source: "'To ease signs and symptoms: Chemotherapy may help relieve signs and symptoms of cancer by killing some of the cancer cells. Doctors call this palliative chemotherapy.' (Foundations of Cancer Treatment, Page 7)"
+            },
+            {
+                learningObjective: "LO5 (Foundations of Cancer Treatment): Explain the rationale underlying the pulsed intermittent chemotherapy and the classification of the chemotherapeutic drugs. Describe common side effects of chemotherapy.",
+                question: "The log-kill principle in chemotherapy states that a given dose of a cytotoxic drug kills a:",
+                options: { A: "Constant number of cancer cells, regardless of tumor size.", B: "Constant fraction of cancer cells, regardless of tumor size.", C: "Larger fraction of cells in a large tumor than in a small tumor.", D: "All cancer cells in a single dose if the tumor is small enough." },
+                correctAnswer: "B",
+                rationale: "The log-kill hypothesis is a cornerstone of chemotherapy. It posits that a specific dose of a drug kills a constant fraction (or percentage) of the tumor cell population, not a constant number. This is why multiple cycles of therapy are required to reduce the tumor burden to a level where the immune system can eliminate the remaining cells.",
+                source: "'It is theorized that cancer cells exposed to a uniform dose of antineoplastic agent will destroy a constant fraction of tumor cells rather than a constant number regardless of tumor burden (referred to as the log-kill principle).' (Foundations of Cancer Treatment, Page 8)"
+            },
+            {
+                learningObjective: "LO5 (Foundations of Cancer Treatment): Explain the rationale underlying the pulsed intermittent chemotherapy and the classification of the chemotherapeutic drugs. Describe common side effects of chemotherapy.",
+                question: "Chemotherapy is typically administered in cycles with rest periods in between (pulsed intermittent therapy). What is the primary rationale for these rest periods?",
+                options: { A: "To allow the tumor to grow back so the next cycle is more effective.", B: "To allow normal, rapidly dividing cells (e.g., bone marrow) to recover from the drug's toxicity.", C: "To reduce the cost of treatment.", D: "To allow the patient to develop resistance to the drug." },
+                correctAnswer: "B",
+                rationale: "Chemotherapy damages both cancer cells and normal, rapidly dividing cells. The rest periods between cycles are crucial to allow normal tissues, especially the bone marrow and gastrointestinal lining, to repopulate and recover, thereby minimizing dose-limiting toxicities.",
+                source: "'...pulsed intermittent chemotherapy maximizes tumor cell killing whilst allowing normal cells damaged by the drug to recover.' (Foundations of Cancer Treatment, Page 8)"
+            },
+            {
+                learningObjective: "LO5 (Foundations of Cancer Treatment): Explain the rationale underlying the pulsed intermittent chemotherapy and the classification of the chemotherapeutic drugs. Describe common side effects of chemotherapy.",
+                question: "A patient receiving chemotherapy develops a fever and is found to have a neutrophil count of 400 cells/μL. This condition, a common and potentially life-threatening side effect of many cytotoxic drugs, is known as:",
+                options: { A: "Anemia", B: "Thrombocytopenia", C: "Tumor lysis syndrome", D: "Neutropenic sepsis" },
+                correctAnswer: "D",
+                rationale: "Neutropenia is a reduction in neutrophils, a type of white blood cell critical for fighting bacterial infections. When a patient with severe neutropenia develops a fever, it is considered a medical emergency known as neutropenic sepsis (or febrile neutropenia), as they are at high risk for a rapidly fatal infection.",
+                source: "'Patients who have low levels of neutrophils have an increased susceptibility to infections. This can lead to a condition called neutropenic sepsis which is a potentially life-threatening emergency.' (Foundations of Cancer Treatment, Page 11)"
+            },
+            {
+                learningObjective: "LO6 (Foundations of Cancer Treatment): Briefly discuss the newer types of cancer treatment options, viz., targeted therapy, hormone therapy and immunotherapy.",
+                question: "A patient with chronic myelogenous leukemia (CML) is treated with imatinib. This drug specifically inhibits the BCR-ABL tyrosine kinase, the molecular driver of CML, without affecting most normal cells. Imatinib is a prime example of which class of cancer therapy?",
+                options: { A: "Cytotoxic chemotherapy", B: "Hormone therapy", C: "Targeted therapy", D: "Immunotherapy" },
+                correctAnswer: "C",
+                rationale: "Targeted therapies are designed to interfere with specific molecular targets (like the BCR-ABL kinase) that are involved in the growth and progression of cancer. They are distinct from standard chemotherapy, which acts more broadly on all rapidly dividing cells.",
+                source: "'Targeted therapies act on specific molecular targets that are associated with cancer, whereas most standard chemotherapies act on all rapidly dividing normal and cancerous cells.' (Foundations of Cancer Treatment, Page 12)"
+            },
+            {
+                learningObjective: "LO6 (Foundations of Cancer Treatment): Briefly discuss the newer types of cancer treatment options, viz., targeted therapy, hormone therapy and immunotherapy.",
+                question: "A patient with metastatic melanoma is treated with pembrolizumab, a drug that blocks the PD-1 protein on T-cells. By blocking this interaction, the drug allows the patient's own T-cells to recognize and attack the tumor. This treatment modality is best classified as:",
+                options: { A: "Hormone therapy", B: "Targeted therapy", C: "Immunotherapy", D: "Cytotoxic chemotherapy" },
+                correctAnswer: "C",
+                rationale: "Pembrolizumab is an immune checkpoint inhibitor. This class of drugs works by boosting or altering the body's own immune system to fight cancer. By blocking 'off-switches' like PD-1, these drugs unleash the T-cells to attack the tumor.",
+                source: "'Immune checkpoint inhibitors, which are drugs that block immune checkpoints. By blocking them, these drugs allow immune cells to respond more strongly to cancer.' (Foundations of Cancer Treatment, Page 13)"
+            },
+            {
+                learningObjective: "LO6 (Foundations of Cancer Treatment): Briefly discuss the newer types of cancer treatment options, viz., targeted therapy, hormone therapy and immunotherapy.",
+                question: "A patient with ER-positive (estrogen receptor-positive) breast cancer is prescribed tamoxifen. This drug works by blocking the estrogen receptor, preventing estrogen from stimulating the cancer cells to grow. This approach is an example of:",
+                options: { A: "Immunotherapy", B: "Targeted therapy", C: "Cytotoxic chemotherapy", D: "Hormone therapy" },
+                correctAnswer: "D",
+                rationale: "Hormone therapy (or endocrine therapy) is used for cancers that are driven by hormones, like certain breast and prostate cancers. These drugs work by either blocking the hormone's action at its receptor (like tamoxifen) or by preventing the body from producing the hormone.",
+                source: "'Hormone therapy... These drugs are used to slow the growth of certain cancers in hormone-responsive tissues such as breast... They work by making the cancer cells unable to use the hormone they need to grow...' (Foundations of Cancer Treatment, Page 12)"
+            },
+            // Survival Mechanisms of Cancer Cells Questions
+            {
+                learningObjective: "LO1 (Survival Mechanisms): Understand cancer survival mechanisms (hallmarks of cancer), emphasizing cancer cells uncontrollable growth, resistance to cell death, and altered metabolism.",
+                question: "Many cancer cells exhibit the 'Warburg effect,' a metabolic shift towards aerobic glycolysis even when sufficient oxygen is available for oxidative phosphorylation. Although this process generates far less ATP per molecule of glucose, what is the primary advantage it provides to rapidly proliferating tumor cells?",
+                options: { A: "It generates more ATP in a shorter amount of time.", B: "It prevents the formation of reactive oxygen species.", C: "It provides metabolic intermediates necessary for the synthesis of nucleic acids, lipids, and proteins.", D: "It allows the cell to survive in completely anaerobic conditions." },
+                correctAnswer: "C",
+                rationale: "The Warburg effect is not primarily about maximizing ATP production. Instead, by shunting glucose through glycolysis, cancer cells can generate the carbon-based building blocks (e.g., intermediates for amino acid and nucleotide synthesis) that are essential for building new cells during rapid proliferation.",
+                source: "'Glycolysis intermediates are used for nucleic acid, fatty acid & SAM synthesis.' (Cancer Survival Mechanisms, Slide 17)"
+            },
+            {
+                learningObjective: "LO1 (Survival Mechanisms): Understand cancer survival mechanisms (hallmarks of cancer), emphasizing cancer cells uncontrollable growth, resistance to cell death, and altered metabolism.",
+                question: "A key hallmark of cancer is the ability to resist programmed cell death, or apoptosis. Cancer cells often achieve this by upregulating anti-apoptotic proteins. Which of the following is a major anti-apoptotic protein that, when overexpressed, can make cancer cells resistant to chemotherapy?",
+                options: { A: "Bax", B: "p53", "C": "Bcl-2", "D": "Caspase-3" },
+                correctAnswer: "C",
+                rationale: "Bcl-2 is a prototypical anti-apoptotic protein. It functions by inhibiting pro-apoptotic proteins like Bax and Bak, thereby preventing the release of cytochrome c from the mitochondria and blocking the intrinsic pathway of apoptosis. Its upregulation is a common mechanism of treatment resistance.",
+                source: "'Cancer cells resist apoptosis by upregulating bcl-2, bcl-XL... which inhibits caspase activity.' (Cancer Survival Mechanisms, Slide 11)"
+            },
+            {
+                learningObjective: "LO1 (Survival Mechanisms): Understand cancer survival mechanisms (hallmarks of cancer), emphasizing cancer cells uncontrollable growth, resistance to cell death, and altered metabolism.",
+                question: "Inactivation of the tumor suppressor protein p53 is one of the most common events in human cancer. A major reason this contributes to cancer progression is that p53 normally acts as a master regulator that can induce which two critical cellular responses to DNA damage?",
+                options: { A: "Angiogenesis and metastasis", B: "Cell cycle arrest and apoptosis", C: "Glycolysis and glutaminolysis", D: "Immune evasion and inflammation" },
+                correctAnswer: "B",
+                rationale: "p53 is a transcription factor that, in response to cellular stress like DNA damage, can halt the cell cycle (primarily at the G1/S checkpoint) to allow for repair. If the damage is irreparable, p53 can trigger apoptosis to eliminate the damaged cell. Loss of p53 removes both of these critical safeguards.",
+                source: "'p53: Induces cell cycle arrest in G1 phase (mainly) and also apoptosis (cell death).' (Cancer Survival Mechanisms, Slide 6)"
+            },
+            {
+                learningObjective: "LO2 (Survival Mechanisms): Understand why cancer cells achieve immortality and telomerase.",
+                question: "Normal somatic cells have a finite number of cell divisions they can undergo before they enter a state of permanent growth arrest. This phenomenon, known as cellular senescence, is primarily caused by what mechanism?",
+                options: { A: "Accumulation of point mutations in oncogenes", B: "Progressive shortening of telomeres with each cell division", C: "Depletion of cellular ATP stores", D: "Downregulation of growth factor receptors" },
+                correctAnswer: "B",
+                rationale: "Telomeres are repetitive DNA sequences at the ends of chromosomes that protect them from degradation. Due to the 'end replication problem,' a small portion of the telomere is lost with each round of DNA replication. Once telomeres shorten to a critical length, the cell enters senescence.",
+                source: "'Each DNA replication cycle, some telomeres are lost: 25 – 200 bases/division. Telomere loss: Chromosome damage causes cellular senescence (cells stop growing).' (Cancer Survival Mechanisms, Slide 14)"
+            },
+            {
+                learningObjective: "LO2 (Survival Mechanisms): Understand why cancer cells achieve immortality and telomerase.",
+                question: "How do the vast majority of cancer cells overcome the problem of telomere shortening to achieve replicative immortality?",
+                options: { A: "They significantly slow down their cell cycle.", B: "They activate a DNA repair mechanism that perfectly rebuilds chromosome ends.", C: "They upregulate the enzyme telomerase.", D: "They fuse their chromosomes into large rings." },
+                correctAnswer: "C",
+                rationale: "Telomerase is a specialized reverse transcriptase that contains an RNA template and is capable of adding telomeric repeats back onto the ends of chromosomes. By over-expressing telomerase, cancer cells can counteract the progressive shortening that occurs with each division, thus bypassing senescence and achieving immortality.",
+                source: "'How do they make up for telomere loss in each cell cycle? Answer: Telomerase (over-expressed in most cancer cells). Telomerase adds back telomeres at the end of each replication cycle.' (Cancer Survival Mechanisms, Slide 15)"
+            },
+            {
+                learningObjective: "LO2 (Survival Mechanisms): Understand why cancer cells achieve immortality and telomerase.",
+                question: "The human telomere consists of thousands of repeats of which specific nucleotide sequence?",
+                options: { A: "GCGCGC", B: "TTAGGG", C: "AATAAA", D: "GATTACA" },
+                correctAnswer: "B",
+                rationale: "The specific, highly conserved repetitive sequence found at the ends of human chromosomes is TTAGGG.",
+                source: "'Human telomere: TTAGGG; ~ 2500 repeats at each end.' (Cancer Survival Mechanisms, Slide 14)"
+            },
+            {
+                learningObjective: "LO3 (Survival Mechanisms): Understand principles of angiogenesis and metastasis.",
+                question: "A solid tumor cannot grow beyond 2-3 mm in diameter without developing its own blood supply. The process of forming new blood vessels from existing vasculature, which is critical for tumor growth and metastasis, is called:",
+                options: { A: "Vasculogenesis", B: "Apoptosis", C: "Senescence", D: "Angiogenesis" },
+                correctAnswer: "D",
+                rationale: "Angiogenesis is the growth of new blood vessels from pre-existing ones. This process is essential for tumors to receive the nutrients and oxygen they need for continued growth and provides a route for metastatic spread.",
+                source: "'Tumors cannot grow > 2-3 mm in diameter w/o angiogenesis. Angiogenesis: Growth of new blood vessels from existing vasculature.' (Cancer Survival Mechanisms, Slide 24)"
+            },
+            {
+                learningObjective: "LO3 (Survival Mechanisms): Understand principles of angiogenesis and metastasis.",
+                question: "The 'angiogenic switch' is a critical step in tumor development where the balance of pro- and anti-angiogenic factors shifts to favor new blood vessel growth. Which of the following is the most important pro-angiogenic factor secreted by tumor cells to stimulate this process?",
+                options: { A: "Thrombospondin-1", B: "Endostatin", C: "Vascular Endothelial Growth Factor (VEGF)", D: "p53" },
+                correctAnswer: "C",
+                rationale: "VEGF is the key signaling molecule that drives angiogenesis. Tumor cells secrete VEGF, which binds to receptors on nearby endothelial cells, stimulating their proliferation, migration, and formation into new capillaries that supply the tumor.",
+                source: "'Angiogenic switch: Tumor cells secrete activators... How activators induce angiogenesis: For example VEGF (Vascular endothelial growth factor; important to remember)...' (Cancer Survival Mechanisms, Slide 24)"
+            },
+            {
+                learningObjective: "LO3 (Survival Mechanisms): Understand principles of angiogenesis and metastasis.",
+                question: "Metastasis is an inefficient, multi-step process that is responsible for the majority of cancer-related deaths. The tendency for certain cancers to metastasize to specific organs (e.g., breast cancer to bone) is best explained by which concept?",
+                options: { A: "The log-kill hypothesis", B: "The Warburg effect", C: "The 'Soil and Seed' hypothesis", D: "The angiogenic switch" },
+                correctAnswer: "C",
+                rationale: "The 'Soil and Seed' hypothesis, first proposed by Stephen Paget, posits that for metastasis to occur, the circulating tumor cell ('seed') must land in a compatible microenvironment in a distant organ ('soil') that can support its survival and growth. This explains the non-random, organ-specific patterns of metastasis.",
+                source: "'Extravasation: Entry & survival in distant organs (metastasis is organ specific)... 'Soil & seed' concept.' (Cancer Survival Mechanisms, Slide 27)"
+            },
+            {
+                learningObjective: "LO4 (Survival Mechanisms): Understand how cancer hallmarks form the molecular basis for treatment.",
+                question: "A patient with HER2-positive breast cancer is treated with Herceptin (trastuzumab). This therapy is designed to specifically target which hallmark of cancer?",
+                options: { A: "Inducing angiogenesis", B: "Sustained growth signaling", C: "Enabling replicative immortality", D: "Altered metabolism" },
+                correctAnswer: "B",
+                rationale: "HER2 is a receptor tyrosine kinase that, when overexpressed, sends constant signals for the cell to grow and divide. Herceptin is a targeted antibody that blocks this receptor, directly inhibiting the 'Sustained Growth Signaling' hallmark.",
+                source: "This is a synthesis question. The diagram on Slide 7 shows HER2 signaling leading to 'Cell cycle progression, Survival, Proliferation'. This directly corresponds to the 'Sustained Growth Signaling' hallmark shown on Slide 3."
+            },
+            {
+                learningObjective: "LO4 (Survival Mechanisms): Understand how cancer hallmarks form the molecular basis for treatment.",
+                question: "Bevacizumab (Avastin) is a monoclonal antibody used to treat several types of cancer, including colorectal and lung cancer. It works by binding to and neutralizing VEGF. This drug targets which cancer hallmark?",
+                options: { A: "Evading growth suppressors", B: "Resisting cell death", C: "Inducing angiogenesis", D: "Genomic instability" },
+                correctAnswer: "C",
+                rationale: "VEGF is the primary driver of angiogenesis. By sequestering VEGF, bevacizumab prevents it from binding to its receptors on endothelial cells, thereby inhibiting the formation of new blood vessels that the tumor needs to grow and metastasize. This directly targets the 'Inducing Angiogenesis' hallmark.",
+                source: "'Examples: FDA-Approved Anti-Angiogenic Treatments. Agent: Bevacizumab (Avastin®). Target: VEGF.' (Cancer Survival Mechanisms, Slide 25)"
+            },
+            {
+                learningObjective: "LO4 (Survival Mechanisms): Understand how cancer hallmarks form the molecular basis for treatment.",
+                question: "A patient with BRCA-mutated ovarian cancer is treated with olaparib, a PARP inhibitor. This drug is effective in these patients because the tumor cells have a pre-existing defect in a specific hallmark pathway, creating a synthetic lethal interaction. Which hallmark pathway is deficient in BRCA-mutated cancers?",
+                options: { A: "Genes involved in DNA repair", B: "Evading growth suppression", C: "Sustained growth signaling", D: "Altered metabolism" },
+                correctAnswer: "A",
+                rationale: "BRCA1 and BRCA2 are critical for homologous recombination, a major pathway for repairing double-strand DNA breaks. PARP inhibitors block a separate, single-strand break repair pathway. In cells with a BRCA mutation, inhibiting PARP as well leads to a collapse of DNA repair capabilities, a concept called synthetic lethality. This targets the 'Genomic instability (mutator phenotype)' hallmark, which arises from defects in DNA repair.",
+                source: "This is a synthesis question. The Overcoming Apoptosis Inhibition slide lists PARP inhibitors for 'BRCA-mutated' cancers (Slide 12). The Carcinogenesis lecture identifies BRCA1 as a tumor suppressor involved in DNA repair (Slide 11 & 14)."
+            },
+            // Individualizing Care of Cancer Patient Questions
+            {
+                learningObjective: "LO1 (Individualizing Care): Explain clonal selection hypothesis in cancer initiation and growth and explain briefly the concepts underlying individualized therapy for solid and liquid malignancies.",
+                question: "The 'one treatment fits all' approach in traditional medicine often results in a spectrum of outcomes, with some patients responding, some not responding, and some experiencing adverse effects. Precision medicine aims to improve this by using what type of information to guide treatment selection?",
+                options: { A: "The patient's geographic location", B: "The cost of the therapy", C: "The patient's genomic, molecular, and lifestyle data", D: "The physician's personal preference" },
+                correctAnswer: "C",
+                rationale: "Precision medicine moves away from a uniform approach by stratifying patients into subgroups based on individual characteristics. This includes analyzing their tumor's genetic makeup (genomics), biomarkers, and other personal factors to select the therapy most likely to be effective and least likely to cause harm for that specific patient.",
+                source: "'Individual patient level: Genomics and Omics, Lifestyle, Preferences, Health History...' (Individualizing Care of Cancer Patient, Slide 7)"
+            },
+            {
+                learningObjective: "LO1 (Individualizing Care): Explain clonal selection hypothesis in cancer initiation and growth and explain briefly the concepts underlying individualized therapy for solid and liquid malignancies.",
+                question: "A patient's lung tumor is analyzed and found to have an ALK gene rearrangement. This allows the oncologist to select a therapy that specifically inhibits the ALK fusion protein. This approach, where patients are grouped by a specific molecular biomarker to receive a targeted treatment, is an example of:",
+                options: { A: "Traditional medicine", B: "Stratified medicine", C: "Palliative medicine", D: "Alternative medicine" },
+                correctAnswer: "B",
+                rationale: "Stratified medicine is an intermediate step between traditional and fully personalized medicine. It involves grouping patients based on shared characteristics, such as a specific biomarker (e.g., ALK rearrangement), to predict their response to a particular therapy.",
+                source: "The diagram on slide 7 shows 'Stratified Medicine' where 'Patients are grouped by: ...Biomarkers, Molecular Sub-populations' to allow for 'more targeted treatment'. (Individualizing Care of Cancer Patient, Slide 7)"
+            },
+            {
+                learningObjective: "LO1 (Individualizing Care): Explain clonal selection hypothesis in cancer initiation and growth and explain briefly the concepts underlying individualized therapy for solid and liquid malignancies.",
+                question: "The development of drug resistance in cancer is a major clinical challenge. A tumor that initially responds to therapy may relapse because a small subpopulation of cells with a pre-existing resistance mutation survives and expands. This process is an example of:",
+                options: { A: "Clonal selection", B: "Genetic drift", C: "Founder effect", D: "Meiotic drive" },
+                correctAnswer: "A",
+                rationale: "Tumors are heterogeneous, containing multiple clones of cells with different mutations. When a therapy is applied, it acts as a selective pressure, killing the sensitive clones. This allows any pre-existing resistant clones to survive and repopulate the tumor, leading to a relapse of drug-resistant disease. This is a classic example of clonal selection.",
+                source: "This concept is fundamental to the entire lecture. The shift from a 'one-size-fits-all' model to a personalized one is driven by understanding the molecular heterogeneity and clonal nature of cancer."
+            },
+            {
+                learningObjective: "LO2 (Individualizing Care): Identify the role of histology and molecular analysis in cancer treatment planning.",
+                question: "A patient is diagnosed with non-small cell lung cancer. Before initiating treatment, the oncologist orders Next-Generation Sequencing (NGS) on the tumor biopsy. The primary purpose of this molecular analysis is to:",
+                options: { A: "Determine the patient's blood type.", B: "Identify actionable driver mutations to guide targeted therapy.", C: "Assess the patient's risk for hereditary cancer.", D: "Confirm that the tissue is cancerous." },
+                correctAnswer: "B",
+                rationale: "In modern oncology, particularly for lung cancer, molecular analysis via NGS is standard of care. It is used to identify specific 'driver mutations' (e.g., in EGFR, ALK, ROS1) for which effective targeted therapies exist. The presence or absence of these mutations directly dictates the choice of first-line therapy.",
+                source: "The pie chart diagram shows non-small cell lung cancer being sub-divided into numerous molecular categories based on specific mutations (EGFR, ALK, KRAS, etc.), each with different treatments. (Individualizing Care of Cancer Patient, Slide 15)"
+            },
+            {
+                learningObjective: "LO2 (Individualizing Care): Identify the role of histology and molecular analysis in cancer treatment planning.",
+                question: "A postmenopausal woman is diagnosed with early-stage, node-negative, ER-positive, HER2-negative breast cancer. Her oncologist is trying to decide whether to recommend adjuvant chemotherapy in addition to endocrine therapy. Which of the following genomic tests can be used on the tumor tissue to predict the likelihood of chemotherapy benefit?",
+                options: { A: "BRCA1/2 germline testing", B: "Oncotype DX Breast Recurrence Score", C: "PD-L1 immunohistochemistry", D: "A complete blood count" },
+                correctAnswer: "B",
+                rationale: "The Oncotype DX assay is a 21-gene expression test performed on tumor tissue from patients with early-stage, ER+, HER2- breast cancer. It provides a Recurrence Score (RS) that predicts the risk of distant recurrence and, importantly, helps quantify the potential benefit from adding chemotherapy to endocrine therapy.",
+                source: "'Which Patients may Benefit from the Oncotype DX® Test?' The diagram shows the test is used for 'Node-negative, ER-positive, HER2-negative' patients where 'the decision to prescribe chemotherapy remains unclear'. (Individualizing Care of Cancer Patient, Slide 18)"
+            },
+            {
+                learningObjective: "LO2 (Individualizing Care): Identify the role of histology and molecular analysis in cancer treatment planning.",
+                question: "A patient with non-small cell lung cancer is being considered for immunotherapy with a PD-L1 inhibitor. Which of the following laboratory tests performed on the tumor biopsy would be most helpful in stratifying patients based on their likelihood of response?",
+                options: { A: "PD-L1 expression level by immunohistochemistry", B: "EGFR mutation analysis", C: "Serum carcinoembryonic antigen (CEA) level", D: "Histologic subtyping (adenocarcinoma vs. squamous)" },
+                correctAnswer: "A",
+                rationale: "The expression of PD-L1 on tumor cells is a predictive biomarker for response to anti-PD-1/PD-L1 immunotherapy. Patients with higher levels of PD-L1 expression (e.g., TPS ≥50%) have been shown to derive a greater benefit from these agents compared to those with low or no expression.",
+                source: "'Stratified Medicine : Response to Immunotherapy Based on PD-L1 strata'. The slide shows three graphs with different hazard ratios (HR) for benefit based on TPS (Tumor Proportion Score) for PD-L1. (Individualizing Care of Cancer Patient, Slide 10)"
+            },
+            {
+                learningObjective: "LO3 (Individualizing Care): Recognize genetic factors that influence drug metabolism and adverse drug reactions in specific populations.",
+                question: "A patient with colon cancer is scheduled to receive a chemotherapy regimen containing irinotecan. The oncologist orders a genetic test for UGT1A1 polymorphisms. A patient with the UGT1A1*28/*28 genotype is at an increased risk for which of the following toxicities?",
+                options: { A: "Cardiotoxicity", B: "Renal failure", C: "Severe neutropenia and diarrhea", D: "Pulmonary fibrosis" },
+                correctAnswer: "C",
+                rationale: "Irinotecan's active metabolite, SN-38, is detoxified by the UGT1A1 enzyme. The UGT1A1*28 polymorphism leads to reduced enzyme activity. Patients who are homozygous for this variant (*28/*28) cannot clear SN-38 effectively, leading to its accumulation and a high risk of severe, life-threatening neutropenia and diarrhea.",
+                source: "The diagram 'Drug metabolism and Genetic polymorphism' shows that irinotecan's active drug (SN-38) is inactivated by UGT1A1. Patients with PM (poor metabolizer) genotypes have increased drug concentrations and an increased risk of neutropenia and diarrhea. (Individualizing Care of Cancer Patient, Slide 24)"
+            },
+            {
+                learningObjective: "LO3 (Individualizing Care): Recognize genetic factors that influence drug metabolism and adverse drug reactions in specific populations.",
+                question: "A patient is found to have a deficiency in the enzyme dihydropyrimidine dehydrogenase (DPD). This patient would be at an extremely high risk for severe toxicity if treated with which of the following chemotherapeutic agents?",
+                options: { A: "Cisplatin", B: "Paclitaxel", C: "5-Fluorouracil (5-FU)", D: "Doxorubicin" },
+                correctAnswer: "C",
+                rationale: "DPD is the primary enzyme responsible for the catabolism and inactivation of 5-Fluorouracil (5-FU). Patients with DPD deficiency cannot break down the drug, leading to prolonged exposure and a dramatically increased risk of severe or fatal toxicities, including mucositis, diarrhea, and myelosuppression.",
+                source: "The diagram on slide 23 shows DPD as the enzyme that converts 5-FU to its inactive form, DHFU. A deficiency would block this pathway. (Individualizing Care of Cancer Patient, Slide 23)"
+            },
+            {
+                learningObjective: "LO3 (Individualizing Care): Recognize genetic factors that influence drug metabolism and adverse drug reactions in specific populations.",
+                question: "A male patient of Mediterranean descent develops acute hemolytic anemia after being treated for an infection. This reaction is highly suggestive of an underlying deficiency in which X-linked enzyme?",
+                options: { A: "UGT1A1", B: "DPD", C: "Glucose-6-phosphate dehydrogenase (G6PD)", D: "CYP2D6" },
+                correctAnswer: "C",
+                rationale: "G6PD deficiency is an X-linked genetic disorder that is common in individuals of Mediterranean, African, and Asian descent. The G6PD enzyme is crucial for protecting red blood cells from oxidative damage. Exposure to certain drugs, infections, or fava beans can trigger massive hemolysis in affected individuals.",
+                source: "'G6PD deficiency causing Hemolysis.' The diagram shows that drug-induced toxins lead to oxidative damage, which, in the absence of functional G6PD, results in 'hemolytic anemia.' (Individualizing Care of Cancer Patient, Slide 25)"
+            },
+            {
+                learningObjective: "LO4 (Individualizing Care): Understand the clinical significance of somatic mutations in cancer for selecting targeted therapies.",
+                question: "A patient with non-small cell lung cancer (NSCLC) is found to have a somatic KRAS G12C mutation in their tumor. The development of sotorasib, a drug that specifically targets this mutated protein, exemplifies which principle of cancer treatment?",
+                options: { A: "All KRAS mutations are treated with the same drug.", B: "Targeted therapies can be designed to inhibit the specific protein products of somatic oncogenic driver mutations.", C: "Chemotherapy is the only option for KRAS-mutated lung cancer.", D: "Somatic mutations are not clinically significant." },
+                correctAnswer: "B",
+                rationale: "The KRAS G12C mutation was long considered 'undruggable.' The development of a specific inhibitor like sotorasib demonstrates the core principle of targeted therapy: identifying a specific somatic mutation that drives the cancer's growth and designing a drug to block the function of that specific altered protein.",
+                source: "The table 'Targeted Therapy response rates' lists 'KRAS G12C' as a target, with 'Sotorasib' as the approved drug. (Individualizing Care of Cancer Patient, Slide 17)"
+            },
+            {
+                learningObjective: "LO4 (Individualizing Care): Understand the clinical significance of somatic mutations in cancer for selecting targeted therapies.",
+                question: "A patient with newly diagnosed acute myeloid leukemia (AML) undergoes molecular testing of the leukemic blasts. The results show a mutation in the IDH1 gene. This finding is clinically significant because:",
+                options: { A: "It indicates the patient will not respond to any chemotherapy.", B: "It is a marker of a hereditary cancer syndrome.", C: "It identifies the patient as a candidate for a targeted therapy that specifically inhibits the mutated IDH1 protein (ivosidenib).", D: "It confirms the patient has a favorable prognosis regardless of treatment." },
+                correctAnswer: "C",
+                rationale: "Somatic mutations in IDH1 and IDH2 are common in AML and lead to the production of an oncometabolite, 2-HG. The identification of these mutations is critical because specific oral inhibitors (ivosidenib for IDH1, enasidenib for IDH2) have been developed and approved for treating AML patients with these mutations.",
+                source: "'Targeting Mutated IDH for AML treatment... IDH1 mutation... Inhibitor Name: Ivosidenib... FDA approval: Newly diagnosed AML with IDH1 mutation.' (Cancer Survival Mechanisms, Slide 20)"
+            },
+            {
+                learningObjective: "LO4 (Individualizing Care): Understand the clinical significance of somatic mutations in cancer for selecting targeted therapies.",
+                question: "The rationale for performing Next Generation Sequencing (NGS) on a tumor specimen is to identify a patient's specific set of somatic mutations. How does this information primarily guide the oncologist?",
+                options: { A: "It determines the surgical approach.", B: "It helps select a personalized, targeted therapy that matches the tumor's molecular profile.", C: "It calculates the exact dose of traditional chemotherapy needed.", D: "It is used mainly for research and has no immediate clinical application." },
+                correctAnswer: "B",
+                rationale: "NGS provides a comprehensive profile of the somatic mutations driving a patient's cancer. This allows the oncologist to move beyond histology-based treatment and select targeted therapies or immunotherapies that are most likely to be effective against the specific molecular vulnerabilities of that individual's tumor.",
+                source: "'NGS can help decide tissue of origin when Histology and IHC are non conclusive.' (Cancer Diagnosis and screening, Slide 35)"
+            },
+            {
+                learningObjective: "LO5 (Individualizing Care): Explain how genetic information (e.g., BRCA1 mutation, hormone receptor status) influences individualized cancer treatment strategies.",
+                question: "A woman is diagnosed with a breast cancer that is estrogen receptor (ER)-positive. The presence of the estrogen receptor on the tumor cells makes her a candidate for which type of systemic therapy?",
+                options: { A: "An immune checkpoint inhibitor like pembrolizumab", B: "A HER2-targeted antibody like trastuzumab", C: "An endocrine (hormone) therapy like tamoxifen or an aromatase inhibitor", D: "A platinum-based chemotherapy like cisplatin" },
+                correctAnswer: "C",
+                rationale: "ER-positive breast cancers depend on estrogen for their growth. Hormone therapies are designed to either block the estrogen receptor (like tamoxifen) or lower the body's estrogen levels (aromatase inhibitors). This is a cornerstone of personalized medicine based on a tumor's biomarker status.",
+                source: "'Endocrine therapy. Treats specific hormone-responsive cancers by blocking or modulating certain hormones. Example: Tamoxifen: used for estrogen receptor-positive breast cancer.' (Foundations of Cancer Treatment, Slide 20)"
+            },
+            {
+                learningObjective: "LO5 (Individualizing Care): Explain how genetic information (e.g., BRCA1 mutation, hormone receptor status) influences individualized cancer treatment strategies.",
+                question: "A patient with metastatic ovarian cancer is found to have a germline BRCA1 mutation. In addition to her increased risk for other cancers, this specific genetic information makes her tumor susceptible to which class of targeted drugs?",
+                options: { A: "Aromatase inhibitors", B: "Monoclonal antibodies against VEGF", C: "Immune checkpoint inhibitors", D: "PARP inhibitors" },
+                correctAnswer: "D",
+                rationale: "BRCA1 is essential for DNA double-strand break repair via homologous recombination. PARP inhibitors block a different DNA repair pathway. In BRCA1-mutated cancer cells, which already lack one repair pathway, blocking the PARP pathway leads to cell death (synthetic lethality). Therefore, a germline BRCA1 mutation is a predictive biomarker for PARP inhibitor sensitivity.",
+                source: "'Overcoming Apoptosis Inhibition: Examples... Target: PARP. Drug: Olaparib... Examples: BRCA-mutated advanced/high-grade epithelial ovarian... cancer.' (Cancer Survival Mechanisms, Slide 12)"
+            },
+            {
+                learningObjective: "LO5 (Individualizing Care): Explain how genetic information (e.g., BRCA1 mutation, hormone receptor status) influences individualized cancer treatment strategies.",
+                question: "A patient with non-small cell lung cancer (NSCLC) has a tumor that is found to be HER2-negative, ER-negative, and has a low PD-L1 score. However, NGS reveals a high tumor mutational burden (TMB). This finding would make the patient a potential candidate for which type of therapy?",
+                options: { A: "Hormone therapy", B: "Anti-HER2 therapy", C: "Immune checkpoint inhibitors", D: "Standard chemotherapy alone" },
+                correctAnswer: "C",
+                rationale: "High tumor mutational burden (TMB) means the tumor has a large number of mutations, which can lead to the production of many neoantigens. These neoantigens can be recognized by the immune system. Therefore, a high TMB is a predictive biomarker for response to immune checkpoint inhibitors, even in the absence of high PD-L1 expression.",
+                source: "This is a key concept in immuno-oncology. While not explicitly stated in a single sentence, the lectures discuss both PD-L1 and NGS-based prediction (slide 11, Individualizing Care) as ways to stratify for immunotherapy, implying multiple biomarkers exist."
+            },
+            // Genetic Counseling for Familial Cancers Questions
+            {
+                learningObjective: "LO1 (Genetic Counseling): Describe when and how to identify individuals for cancer genetics risk assessment and counseling.",
+                question: "A 48-year-old woman is diagnosed with breast cancer. Her mother had breast cancer at age 52, and her maternal aunt had ovarian cancer at age 60. According to the 'Red Flags' of hereditary cancer, what is the most appropriate next step for this patient?",
+                options: { A: "Reassure her that this is likely sporadic due to her age being over 45.", B: "Refer her for genetic counseling and consideration of genetic testing.", C: "Recommend prophylactic surgery for her daughters.", D: "Begin screening her for colon cancer immediately." },
+                correctAnswer: "B",
+                rationale: "This patient's personal and family history contains multiple red flags: an early-ish age at diagnosis (<50 is a common cutoff), and multiple close relatives with related cancers (breast and ovarian cancer cluster is classic for HBOC). These features strongly warrant a referral for genetic counseling to assess her risk and discuss testing options.",
+                source: "'Red Flags of Hereditary Cancer: Early age at diagnosis; Multiple close relatives with same or related cancers.' (Genetic Counseling for Familial Cancers, Slide 8)"
+            },
+            {
+                learningObjective: "LO1 (Genetic Counseling): Describe when and how to identify individuals for cancer genetics risk assessment and counseling.",
+                question: "Which of the following scenarios should 'always' prompt consideration of panel genetic testing for a syndromic cause of cancer?",
+                options: { A: "A 75-year-old man with prostate cancer and a negative family history.", B: "A 60-year-old woman with a single basal cell carcinoma.", C: "A 45-year-old woman with medullary thyroid cancer.", D: "A 55-year-old man with colon polyps found on routine screening." },
+                correctAnswer: "C",
+                rationale: "Certain rare tumor types are so strongly associated with specific hereditary syndromes that their diagnosis alone is an indication for genetic testing, regardless of family history. Medullary thyroid cancer is a classic example, being a hallmark of Multiple Endocrine Neoplasia type 2 (MEN2).",
+                source: "'Always' Tumors - Syndromic. Always need panel genetic testing. Syndromic... Medullary thyroid cancer (MEN2).' (Genetic Counseling for Familial Cancers, Slide 7)"
+            },
+            {
+                learningObjective: "LO1 (Genetic Counseling): Describe when and how to identify individuals for cancer genetics risk assessment and counseling.",
+                question: "A patient's tumor is sequenced as part of their cancer treatment, and a pathogenic variant in the BRCA1 gene is identified. This finding is significant not only for targeted therapy (e.g., PARP inhibitors) but also because it serves as which of the following?",
+                options: { A: "A guarantee that the patient will develop a second cancer.", B: "A 'red flag' indicating a possible germline variant that should be confirmed with a blood or saliva test.", C: "Proof that the cancer is not hereditary.", D: "An indication to stop all further cancer screening." },
+                correctAnswer: "B",
+                rationale: "When a pathogenic variant in a known hereditary cancer gene like BRCA1 is found in tumor tissue, there is a possibility that it is a germline (inherited) mutation rather than a somatic (acquired) one. This finding is a major red flag that warrants a referral for genetic counseling and confirmatory testing on a non-tumor sample (like blood or saliva) to determine if the patient has a hereditary cancer syndrome.",
+                source: "'Tumor testing shows a possible germline variant (e.g., BRCA1 variant).' (Genetic Counseling for Familial Cancers, Slide 8)"
+            },
+            {
+                learningObjective: "LO2 (Genetic Counseling): Evaluate and discuss with patients considerations for cancer genetic testing, including ethical, legal, and social implications.",
+                question: "A patient is concerned that if they undergo genetic testing and are found to have a BRCA1 mutation, their health insurance company will cancel their policy. Which federal law specifically protects individuals from this type of discrimination?",
+                options: { A: "The Health Insurance Portability and Accountability Act (HIPAA)", B: "The Affordable Care Act (ACA)", C: "The Genetic Information Nondiscrimination Act (GINA)", D: "The Americans with Disabilities Act (ADA)" },
+                correctAnswer: "C",
+                rationale: "The Genetic Information Nondiscrimination Act (GINA) of 2008 is a federal law that prohibits health insurers from using genetic information to make decisions about a person's eligibility, coverage, or premiums. It also prevents employers from using genetic information in hiring, firing, or promotion decisions.",
+                source: "'Insurance – GINA 2008.' (Genetic Counseling for Familial Cancers, Slide 9)"
+            },
+            {
+                learningObjective: "LO2 (Genetic Counseling): Evaluate and discuss with patients considerations for cancer genetic testing, including ethical, legal, and social implications.",
+                question: "During a genetic counseling session, a patient expresses that their primary goal is to know their cancer risk so they can inform their children, while the clinician is focused on immediate surgical risk-reduction options. This situation highlights which important patient factor in genetic counseling?",
+                options: { A: "Family history knowledge", B: "Patients' goals may be very different than the clinicians'", C: "Insurance coverage", D: "The need for psychological support" },
+                correctAnswer: "B",
+                rationale: "A key aspect of patient-centered genetic counseling is recognizing that patients have their own unique motivations, values, and goals. It is crucial for the clinician to elicit and understand these goals, which may differ from a purely clinical perspective, to facilitate shared and informed decision-making.",
+                source: "'Patients’ goals may be very different than the clinicians’.' (Genetic Counseling for Familial Cancers, Slide 9)"
+            },
+            {
+                learningObjective: "LO2 (Genetic Counseling): Evaluate and discuss with patients considerations for cancer genetic testing, including ethical, legal, and social implications.",
+                question: "A patient is found to have a pathogenic variant for a hereditary cancer syndrome. They are worried about the implications for their family members. What is a primary role of the genetic counselor in this situation?",
+                options: { A: "To contact all family members directly without the patient's consent.", B: "To provide the patient with information and resources to help them discuss the results with their family.", C: "To insist that all family members get tested immediately.", D: "To withhold the information from the patient to prevent family anxiety." },
+                correctAnswer: "B",
+                rationale: "The genetic counselor's role is to empower the patient. This includes educating them on the inheritance pattern, discussing which relatives are at risk, and providing tools (like a family letter) to facilitate communication. The decision of who and how to inform relatives ultimately rests with the patient, respecting their autonomy and privacy.",
+                source: "'Coordinate testing and interpret results.' This implies managing the process, which includes counseling on familial implications. (Genetic Counseling for Familial Cancers, Slide 3)"
+            },
+            // Palliative Care Questions
+            {
+                learningObjective: "LO1 (Palliative Care): Define what palliative care is.",
+                question: "A 58-year-old man is newly diagnosed with stage III lung cancer and is starting concurrent chemotherapy and radiation with curative intent. He is experiencing significant pain, nausea, and anxiety. At what point in his illness is it appropriate to involve palliative care?",
+                options: { A: "Only after he has failed all curative treatment options.", B: "Only if he decides to transition to hospice care.", C: "At the time of diagnosis, to be provided concurrently with his curative-intent treatment.", D: "Only in the final weeks of life." },
+                correctAnswer: "C",
+                rationale: "A core principle of modern palliative care is that it is appropriate at any age and at any stage of a serious illness and can be provided alongside curative treatment. Its focus is on relieving suffering and improving quality of life, which is beneficial from the moment of diagnosis.",
+                source: "'Approach to care which focuses on relieving suffering, providing comfort, and improving quality of life... Addresses pain, suffering, depression, quality of life throughout course of disease. Not only end of life care.' (Palliative Care in Cancer Care, Slide 6)"
+            },
+            {
+                learningObjective: "LO1 (Palliative Care): Define what palliative care is.",
+                question: "Which of the following statements best distinguishes hospice care from palliative care?",
+                options: { A: "Palliative care is only for cancer patients, while hospice is for any terminal illness.", B: "Hospice is a specific type of palliative care for patients near the end of life when life-prolonging therapies are no longer being pursued.", C: "Palliative care focuses on pain management, while hospice focuses on emotional support.", D: "There is no difference; the terms are interchangeable." },
+                correctAnswer: "B",
+                rationale: "All hospice care is palliative, but not all palliative care is hospice. Hospice is a specific model of care focused on patients in the final weeks or months of life, where the harm of life-prolonging therapies is considered to outweigh the benefit. Palliative care can be provided at any point during a serious illness, including alongside aggressive, curative treatments.",
+                source: "'HOSPICE: final weeks/months when harm of life-prolonging therapies exceeds benefit.' (Palliative Care in Cancer Care, Slide 6)"
+            },
+            {
+                learningObjective: "LO1 (Palliative Care): Define what palliative care is.",
+                question: "The primary goal of palliative care is to:",
+                options: { A: "Cure the underlying disease.", B: "Provide life-prolonging therapies at all costs.", C: "Focus on relieving suffering and improving quality of life for patients and their families.", D: "Replace the role of the primary oncologist." },
+                correctAnswer: "C",
+                rationale: "Palliative care is an interdisciplinary approach that focuses on the whole person, not just their disease. The central mission is to prevent and relieve suffering and to support the best possible quality of life for patients and their families, regardless of the stage of the disease or the need for other therapies.",
+                source: "'Approach to care which focuses on relieving suffering, providing comfort, and improving quality of life for those affected by life-limiting/life-threatening illness.' (Palliative Care in Cancer Care, Slide 6)"
+            },
+            {
+                learningObjective: "LO2 (Palliative Care): Determine who should be considered for palliative care.",
+                question: "A 72-year-old woman with advanced Alzheimer's disease is admitted to the hospital with pneumonia. She has had multiple hospitalizations in the past year, has lost 15% of her body weight, and is dependent in all activities of daily living. Which of the following factors makes her an appropriate candidate for a palliative care consultation?",
+                options: { A: "Her age alone.", B: "The fact that she has pneumonia, which is a treatable condition.", C: "Her progressive, life-limiting neurodegenerative illness with functional decline.", D: "The family's request for aggressive, life-sustaining interventions." },
+                correctAnswer: "C",
+                rationale: "Palliative care is indicated for patients with any progressive life-limiting illness. Advanced dementia, characterized by significant functional decline, weight loss, and frequent hospitalizations, is a classic indication for a palliative approach to clarify goals of care and focus on comfort.",
+                source: "'Who should be considered for Palliation? Progressive life-limiting illness... -advanced neurodegenerative illness (ALS, Alzheimer's disease).' (Palliative Care in Cancer Care, Slide 10)"
+            },
+            {
+                learningObjective: "LO2 (Palliative Care): Determine who should be considered for palliative care.",
+                question: "Which of the following patients would be most appropriate for a hospice referral?",
+                options: { A: "A patient with newly diagnosed, early-stage breast cancer.", B: "A patient with metastatic lung cancer with a good performance status who wishes to continue chemotherapy.", C: "A patient with end-stage congestive heart failure who has symptoms at rest despite maximal medical therapy.", D: "A patient with a hip fracture requiring surgical repair." },
+                correctAnswer: "C",
+                rationale: "Hospice is for patients with a terminal illness where the focus has shifted from life-prolonging care to comfort. A patient with NYHA Class IV heart failure (symptoms at rest) despite maximal therapy has a poor prognosis and meets typical criteria for hospice eligibility.",
+                source: "'Congestive Heart Failure. -New York Heart Association class III or IV with symptoms despite maximal medical management.' (Palliative Care in Cancer Care, Slide 12)"
+            },
+            {
+                learningObjective: "LO2 (Palliative Care): Determine who should be considered for palliative care.",
+                question: "A 65-year-old man with metastatic pancreatic cancer has a Karnofsky Performance Status score of 40. This score indicates that he is disabled and requires special care and assistance. This poor performance status is a prognostic factor that would support consideration of which of the following?",
+                options: { A: "Enrollment in an aggressive clinical trial", B: "Increased chemotherapy doses", C: "Referral to hospice care", D: "A curative surgical resection" },
+                correctAnswer: "C",
+                rationale: "Performance status is a key prognostic indicator in oncology. A low score, such as a Karnofsky score <50, indicates significant functional impairment and a poor prognosis, making the patient an appropriate candidate for a discussion about hospice care.",
+                source: "'Prognosis Factors for Considering Hospice in Selected Diagnosis. Cancer. -performance status... -Karnofsky score <50.' (Palliative Care in Cancer Care, Slide 11)"
+            },
+            {
+                learningObjective: "LO3 (Palliative Care): Learn how to have open communication in discussing palliative care/hospice.",
+                question: "A physician is preparing to have a goals-of-care discussion with a patient with a life-limiting illness and their family. Which of the following actions is a key component of 'setting the stage' for a successful conversation?",
+                options: { A: "Standing by the door to keep the meeting brief.", B: "Having the conversation in a busy hallway to be efficient.", C: "Ensuring all participants are sitting down in a private, quiet space.", D: "Using complex medical jargon to convey expertise." },
+                correctAnswer: "C",
+                rationale: "Creating a conducive environment is critical for sensitive conversations. This includes ensuring privacy, minimizing distractions, and sitting down, which conveys that you are giving the patient and family your time and full attention and puts everyone at ease.",
+                source: "'Set the Stage. In person. Sitting down. Minimize distractions.' (Palliative Care in Cancer Care, Slide 14)"
+            },
+            {
+                learningObjective: "LO3 (Palliative Care): Learn how to have open communication in discussing palliative care/hospice.",
+                question: "A patient with a new life-limiting diagnosis is very quiet and does not ask any questions after hearing the news. According to the principles of palliative communication, the physician should:",
+                options: { A: "Assume the patient has understood everything and has no concerns.", B: "End the conversation quickly to give the patient space.", C: "Gently probe for understanding and concerns, recognizing that an absence of questions does not mean an absence of concerns.", D: "Wait for the patient to ask specific questions like 'How long do I have?' before discussing prognosis." },
+                correctAnswer: "C",
+                rationale: "Patients may be too overwhelmed or intimidated to ask questions. It is a common pitfall to assume silence equals understanding or acceptance. Proactive, gentle communication is necessary to explore the patient's understanding, fears, and worries, as waiting for them to pose questions can result in missed opportunities.",
+                source: "'Don't assume that the absence of questions reflects an absence of concerns... Waiting for such questions to be posed may result in missed opportunities to address concerns.' (Palliative Care in Cancer Care, Slide 16)"
+            },
+            {
+                learningObjective: "LO3 (Palliative Care): Learn how to have open communication in discussing palliative care/hospice.",
+                question: "When discussing end-of-life care, a physician says to the family, 'We are going to stop all the aggressive treatments and just keep him comfortable.' While well-intentioned, this phrasing can be problematic. A better approach would be to:",
+                options: { A: "Use more medical jargon to be precise.", B: "Focus on what treatments will be provided for comfort, rather than what is being 'stopped'.", C: "Avoid the topic entirely unless the family brings it up.", D: "Promise the family that the patient will not die." },
+                correctAnswer: "B",
+                rationale: "The language used in these conversations is critical. Phrasing like 'stopping treatment' or 'doing nothing' can be interpreted by families as abandonment. It is better to reframe the conversation to focus on the active, positive things that will be done to ensure comfort, such as managing pain and dyspnea, and honoring the patient's dignity.",
+                source: "This is a synthesis of the communication principles. 'Be Clear' (Slide 15) and 'Acknowledge and Validate Concerns' (Slide 18) support reframing language to be clear, positive, and focused on the patient's goals and comfort."
+            },
+            {
+                learningObjective: "LO4 (Palliative Care): Identify means of managing end of life (EOL) symptoms.",
+                question: "A 62-year-old man with metastatic lung cancer develops severe, aching pain in his right femur due to a bony metastasis. This type of well-localized pain originating from bone is best classified as:",
+                options: { A: "Visceral pain", B: "Neuropathic pain", C: "Somatic pain", D: "Psychogenic pain" },
+                correctAnswer: "C",
+                rationale: "Somatic pain arises from injury to musculoskeletal tissues (bone, muscle, soft tissue). It is typically described as aching, sharp, or dull and is well-localized. This is distinct from visceral pain (poorly localized, crampy) and neuropathic pain (burning, tingling).",
+                source: "'Types of pain. -Nociceptive. *Somatic: aching, often constant, dull or sharp, worse with movement, well localized (bone and soft tissue, chest wall).' (Palliative Care in Cancer Care, Slide 23)"
+            },
+            {
+                learningObjective: "LO4 (Palliative Care): Identify means of managing end of life (EOL) symptoms.",
+                question: "A 78-year-old man with end-stage COPD and lung cancer has severe dyspnea at rest. He is already on maximal therapy for his COPD. Which class of medication is considered a standard of care for the symptomatic relief of dyspnea in patients with advanced cancer?",
+                options: { A: "Beta-blockers", B: "Opioids", C: "NSAIDs", D: "Antibiotics" },
+                correctAnswer: "B",
+                rationale: "Opioids, such as morphine, are the cornerstone of pharmacologic management for dyspnea in the palliative care setting, particularly for cancer patients. They are thought to work by reducing the central perception of breathlessness.",
+                source: "'Opioids: standard for cancer but not COPD.' (Palliative Care in Cancer Care, Slide 43)"
+            },
+            {
+                learningObjective: "LO4 (Palliative Care): Identify means of managing end of life (EOL) symptoms.",
+                question: "A patient in the final hours of life develops noisy respiratory secretions, sometimes referred to as a 'death rattle'. This is often more distressing to the family than to the patient. In addition to repositioning the patient, which class of medication is used to manage this symptom?",
+                options: { A: "Diuretics", B: "Bronchodilators", C: "Antisecretory (anticholinergic) agents", D: "Opioids" },
+                correctAnswer: "C",
+                rationale: "The 'death rattle' is caused by an inability to clear secretions from the upper airway. The primary pharmacologic management is to reduce the production of these secretions using antisecretory agents with anticholinergic properties, such as scopolamine or glycopyrrolate.",
+                source: "'Management. -antisecretory agents: scopolamine, glycopyrrolate.' (Palliative Care in Cancer Care, Slide 50)"
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Element Selection ---
+            const quizContainer = document.getElementById('quiz-container');
+            const themeToggleButton = document.getElementById('theme-toggle-button');
+            const bodyElement = document.body;
+
+            // --- Theme Functions ---
+            function applyTheme(theme) {
+                if (theme === 'light') {
+                    bodyElement.classList.add('light-theme');
+                    themeToggleButton.textContent = 'Switch to Dark Mode';
+                } else {
+                    bodyElement.classList.remove('light-theme');
+                    themeToggleButton.textContent = 'Switch to Light Mode';
+                }
+                localStorage.setItem('quizTheme', theme);
+            }
+
+            themeToggleButton.addEventListener('click', () => {
+                if (bodyElement.classList.contains('light-theme')) {
+                    applyTheme('dark');
+                } else {
+                    applyTheme('light');
+                }
+            });
+
+            // --- Quiz Logic ---
+            function loadQuiz() {
+                if (!quizContainer) {
+                    console.error("Quiz container not found!");
+                    return;
+                }
+                quizData.forEach((qData, index) => {
+                    const questionBlock = document.createElement('div');
+                    questionBlock.classList.add('question-block');
+                    questionBlock.id = `q${index}`;
+
+                    const loText = document.createElement('div');
+                    loText.classList.add('learning-objective');
+                    loText.textContent = qData.learningObjective;
+                    questionBlock.appendChild(loText);
+
+                    const questionText = document.createElement('p');
+                    questionText.classList.add('question-text');
+                    questionText.innerHTML = `${index + 1}. ${qData.question}`;
+                    questionBlock.appendChild(questionText);
+
+                    const optionsDiv = document.createElement('div');
+                    optionsDiv.classList.add('options');
+
+                    for (const optionKey in qData.options) {
+                        const optionId = `q${index}_${optionKey}`;
+                        const label = document.createElement('label');
+                        label.htmlFor = optionId;
+                        const radioInput = document.createElement('input');
+                        radioInput.type = 'radio';
+                        radioInput.name = `q${index}`;
+                        radioInput.value = optionKey;
+                        radioInput.id = optionId;
+                        const labelText = document.createElement('span');
+                        labelText.textContent = ` ${optionKey}. ${qData.options[optionKey]}`;
+                        label.appendChild(radioInput);
+                        label.appendChild(labelText);
+                        optionsDiv.appendChild(label);
+                    }
+                    questionBlock.appendChild(optionsDiv);
+
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.classList.add('button-container');
+
+                    const checkButton = document.createElement('button');
+                    checkButton.textContent = 'Check Answer';
+                    checkButton.classList.add('check-button');
+                    checkButton.onclick = () => checkAnswer(index);
+                    buttonContainer.appendChild(checkButton);
+                    
+                    questionBlock.appendChild(buttonContainer);
+
+                    const feedbackDiv = document.createElement('div');
+                    feedbackDiv.classList.add('feedback');
+                    questionBlock.appendChild(feedbackDiv);
+
+                    quizContainer.appendChild(questionBlock);
+                });
+            }
+
+            // Make checkAnswer globally accessible
+            window.checkAnswer = function(questionIndex) {
+                const questionBlockElement = document.getElementById(`q${questionIndex}`);
+                const selectedRadioButton = questionBlockElement.querySelector('input[type="radio"]:checked');
+
+                if (!selectedRadioButton) {
+                    alert("Please select an answer first.");
+                    return;
+                }
+
+                const selectedOptionKey = selectedRadioButton.value;
+                const qData = quizData[questionIndex];
+                const feedbackDiv = questionBlockElement.querySelector('.feedback');
+                const correct = selectedOptionKey === qData.correctAnswer;
+
+                let feedbackHTML = '';
+
+                if (correct) {
+                    feedbackHTML = `<span class="feedback-status">Correct!</span>`;
+                    feedbackDiv.className = 'feedback correct';
+                } else {
+                     feedbackHTML = `<span class="feedback-status">Incorrect. The correct answer is ${qData.correctAnswer}.</span>`;
+                    feedbackDiv.className = 'feedback incorrect';
+                }
+
+                feedbackHTML += `<div class="feedback-rationale"><strong>Rationale:</strong> ${qData.rationale}</div>`;
+                feedbackHTML += `<div class="feedback-source">${qData.source}</div>`;
+                feedbackDiv.innerHTML = feedbackHTML;
+            }
+
+            // --- Initial Load ---
+            const savedTheme = localStorage.getItem('quizTheme') || 'dark';
+            applyTheme(savedTheme);
+            loadQuiz();
+        });
+
+    </script>
+
+</body>
+</html>
